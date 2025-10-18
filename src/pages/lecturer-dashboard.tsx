@@ -1,13 +1,10 @@
 import { type FC } from "react";
-import { Box, Typography, Grid, useTheme } from "@mui/material";
+import { Box, Typography, Grid } from "@mui/material";
 import AttendanceWidget from "@/components/attendance-widget.tsx";
 import MapDisplay from "@/components/map-display.tsx";
-import { MOCK_LOCATIONS, DUTSE_CENTER } from "@/utils/map-location";
+import { MOCK_LOCATIONS } from "@/utils/map-location";
 
 const LecturerDashboard: FC = () => {
-    const theme = useTheme();
-
-    // The lecturer's scheduled class for the day
     const classVenue = MOCK_LOCATIONS.CLASS_VENUE;
 
     // Prepare markers for the map
@@ -16,16 +13,15 @@ const LecturerDashboard: FC = () => {
             position: classVenue,
             label: `Scheduled Class: ${classVenue.name}`,
         },
-        // We'll also show the mock user's current location on the map for clarity
         {
             position: MOCK_LOCATIONS.USER_CURRENT,
             label: "Your Current Location (Simulated)",
-            icon: "blue_dot", // Leaflet doesn't use these icons easily, but the label is clear
+            icon: "blue_dot", // Leaflet uses default pins; this label is for visualisation
         },
     ];
 
     return (
-        <Box>
+        <Box sx={{ minHeight: "100vh" }}>
             <Typography variant="h4" gutterBottom sx={{ fontWeight: 700 }}>
                 Lecturer Dashboard
             </Typography>
@@ -34,10 +30,10 @@ const LecturerDashboard: FC = () => {
             </Typography>
 
             <Grid container spacing={4}>
-                {/* Attendance Check Widget */}
+                {/* Attendance Check Widget (Location-Restricted to CLASS_VENUE) */}
                 <Grid size={{ xs: 12, md: 4 }}>
                     <AttendanceWidget
-                        targetLocation="CLASS_VENUE" // Must match the MOCK_LOCATIONS key
+                        targetLocation="CLASS_VENUE" // CRUCIAL: Enforces check-in at the JigPoly classroom
                         userRole="Lecturer"
                     />
                 </Grid>
@@ -47,12 +43,14 @@ const LecturerDashboard: FC = () => {
                     <Box
                         sx={{
                             height: "500px",
-                            borderRadius: theme.borderRadius.large,
                             overflow: "hidden",
-                            boxShadow: theme.customShadows.dialog,
+                            borderRadius: 5,
                         }}
                     >
-                        <MapDisplay center={DUTSE_CENTER} markers={mapMarkers} />
+                        <MapDisplay
+                            center={classVenue} // Center the map on the actual class venue for lecturer context
+                            markers={mapMarkers}
+                        />
                     </Box>
                 </Grid>
             </Grid>

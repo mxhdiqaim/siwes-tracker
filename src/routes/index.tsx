@@ -25,16 +25,16 @@ export const appRoutes: AppRouteType[] = [
         icon: "🏠",
     },
     {
-        to: "/lecturer",
-        title: "Lecturer Dashboard",
-        element: LecturerDashboard,
-        icon: "🎓",
-    },
-    {
         to: "/supervisor",
         title: "Supervisor Dashboard",
         element: SupervisorDashboardScreen,
         icon: "🚀",
+    },
+    {
+        to: "/lecturer",
+        title: "Lecturer Dashboard",
+        element: LecturerDashboard,
+        icon: "🎓",
     },
     {
         to: "/student",
