@@ -3,7 +3,7 @@ import { Box, Typography, Grid, useTheme, Card, CardContent, List, ListItem, Chi
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import MapDisplay from "@/components/map-display.tsx";
 import AttendanceWidget from "@/components/attendance-widget";
-import { MOCK_LOCATIONS, ABUJA_CENTER } from "@/utils/map-location";
+import { MOCK_LOCATIONS, DUTSE_CENTER } from "@/utils/map-location";
 import CustomCard from "@/components/ui/custom-card.tsx";
 
 // Mock data structure for assigned SIWES students
@@ -90,7 +90,7 @@ const SupervisorDashboard: FC = () => {
                     >
                         <Box sx={{ height: "100%", width: "100%" }}>
                             <MapDisplay
-                                center={ABUJA_CENTER} // Center the map on Abuja
+                                center={DUTSE_CENTER} // Center the map on Abuja
                                 markers={mapMarkers} // Show the Site vs. Supervisor's location
                             />
                         </Box>

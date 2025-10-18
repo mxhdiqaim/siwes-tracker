@@ -1,7 +1,7 @@
 import { type FC, useMemo, useState } from "react";
 import { Box, Typography, Card, useTheme, Grid, Button } from "@mui/material";
 import MapDisplay from "@/components/map-display.tsx";
-import { MOCK_LOCATIONS, ABUJA_CENTER, isLocationNear } from "@/utils/map-location";
+import { MOCK_LOCATIONS, DUTSE_CENTER, isLocationNear } from "@/utils/map-location";
 
 // Define the marker structure based on the props accepted by MapDisplay
 interface LocationMarker {
@@ -83,7 +83,7 @@ const AdminDashboard: FC = () => {
                 {/* 1. Map Verification Display */}
                 <Grid size={{ xs: 12, md: 8 }}>
                     <Box sx={{ height: "100%", width: "100%", borderRadius: 2, overflow: "hidden" }}>
-                        <MapDisplay center={ABUJA_CENTER} markers={mapMarkers} />
+                        <MapDisplay center={DUTSE_CENTER} markers={mapMarkers} />
                     </Box>
                 </Grid>
 

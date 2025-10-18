@@ -2,7 +2,7 @@ import { type FC } from "react";
 import { Box, Typography, Grid, useTheme } from "@mui/material";
 import AttendanceWidget from "@/components/attendance-widget.tsx";
 import MapDisplay from "@/components/map-display.tsx";
-import { MOCK_LOCATIONS, ABUJA_CENTER } from "@/utils/map-location";
+import { MOCK_LOCATIONS, DUTSE_CENTER } from "@/utils/map-location";
 
 const LecturerDashboard: FC = () => {
     const theme = useTheme();
@@ -52,7 +52,7 @@ const LecturerDashboard: FC = () => {
                             boxShadow: theme.customShadows.dialog,
                         }}
                     >
-                        <MapDisplay center={ABUJA_CENTER} markers={mapMarkers} />
+                        <MapDisplay center={DUTSE_CENTER} markers={mapMarkers} />
                     </Box>
                 </Grid>
             </Grid>
