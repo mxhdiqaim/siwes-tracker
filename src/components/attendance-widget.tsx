@@ -1,19 +1,20 @@
 import { useState, type FC } from "react";
 import { isLocationNear, MOCK_LOCATIONS } from "@/utils/map-location.ts";
-import { Box, Typography, Button, useTheme } from "@mui/material";
+import { Box, Typography, Button, useTheme, Stack } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import LocationOffIcon from "@mui/icons-material/LocationOff";
+import CustomCard from "@/components/ui/custom-card.tsx";
 
-interface AttendanceProps {
+interface Pros {
     targetLocation: keyof typeof MOCK_LOCATIONS;
     userRole: "Lecturer" | "Student" | "Supervisor";
 }
 
-const AttendanceWidget: FC<AttendanceProps> = ({ targetLocation, userRole }) => {
+const AttendanceWidget: FC<Pros> = ({ targetLocation, userRole }) => {
     const theme = useTheme();
     const venue = MOCK_LOCATIONS[targetLocation];
 
-    // --- State and Logic ---
+    // State and Logic
     const [userLocation, setUserLocation] = useState(MOCK_LOCATIONS.USER_CURRENT);
     const [status, setStatus] = useState<"pending" | "success" | "fail">("pending");
 
@@ -31,21 +32,13 @@ const AttendanceWidget: FC<AttendanceProps> = ({ targetLocation, userRole }) => 
         }
     };
 
-    // --- Dynamic Styling/Content ---
+    // Dynamic Styling/Content
     const statusColor = isWithinRange ? theme.palette.success.main : theme.palette.error.main;
     const statusText = isWithinRange ? "Ready to Check In (Within Range)" : "Not at Venue (Location Mismatch)";
     const checkInDisabled = !isWithinRange || status === "success";
 
     return (
-        <Box
-            sx={{
-                p: 2,
-                border: `1px solid ${theme.palette.customColors.border}`,
-                borderRadius: theme.borderRadius.medium,
-                maxWidth: 350,
-                boxShadow: theme.customShadows.card,
-            }}
-        >
+        <CustomCard>
             <Typography variant="h6" sx={{ mb: 2, fontWeight: 700 }}>
                 {userRole} Attendance Check
             </Typography>
@@ -77,28 +70,30 @@ const AttendanceWidget: FC<AttendanceProps> = ({ targetLocation, userRole }) => 
             </Button>
 
             {/* Simulation Controls for POC */}
-            <Box sx={{ mt: 3, p: 2, bgcolor: theme.palette.grey[50], borderRadius: theme.borderRadius.small }}>
+            <Box sx={{ mt: 3, p: 2, background: theme.palette.grey[50], borderRadius: theme.borderRadius.small }}>
                 <Typography variant="caption" sx={{ display: "block", mb: 1, fontWeight: 600 }}>
-                    — POC Simulation Controls —
+                    POC Simulation Controls
                 </Typography>
-                <Button
-                    onClick={() => setUserLocation(MOCK_LOCATIONS.USER_CURRENT)}
-                    size="small"
-                    variant="contained"
-                    sx={{ mr: 1, bgcolor: theme.palette.info.main }}
-                >
-                    Simulate: At Venue
-                </Button>
-                <Button
-                    onClick={() => setUserLocation(MOCK_LOCATIONS.USER_FAR)}
-                    size="small"
-                    variant="contained"
-                    sx={{ bgcolor: theme.palette.warning.main }}
-                >
-                    Simulate: Away
-                </Button>
+                <Stack>
+                    <Button
+                        onClick={() => setUserLocation(MOCK_LOCATIONS.USER_CURRENT)}
+                        size="small"
+                        variant="contained"
+                        sx={{ background: theme.palette.info.main, my: 1 }}
+                    >
+                        Simulate: At Venue
+                    </Button>
+                    <Button
+                        onClick={() => setUserLocation(MOCK_LOCATIONS.USER_FAR)}
+                        size="small"
+                        variant="contained"
+                        sx={{ background: theme.palette.warning.main, my: 1 }}
+                    >
+                        Simulate: Away
+                    </Button>
+                </Stack>
             </Box>
-        </Box>
+        </CustomCard>
     );
 };
 

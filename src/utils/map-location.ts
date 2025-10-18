@@ -7,8 +7,8 @@ export const MOCK_LOCATIONS = {
     CLASS_VENUE: { lat: 9.07, lng: 7.41, name: "CST Lecture Theatre" },
     // SIWES Site Location (e.g., a company in Jabi)
     SIWES_SITE: { lat: 9.05, lng: 7.4, name: "Jabi Tech Hub" },
-    // Mock user's location (e.g., the lecturer's current position)
-    USER_CURRENT: { lat: 9.07005, lng: 7.41005, name: "User Current Location" },
+    // Mock user's location (e.g. the lecturer's current position)
+    USER_CURRENT: { lat: 9.05, lng: 7.4, name: "User Current Location" },
     USER_FAR: { lat: 9.0, lng: 7.0, name: "User Far Away" },
 };
 

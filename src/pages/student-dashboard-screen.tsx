@@ -2,12 +2,12 @@ import { useMemo, type FC } from "react";
 import { Box, Typography, Grid, useTheme, LinearProgress } from "@mui/material";
 import AttendanceWidget from "@/components/attendance-widget.tsx";
 import MapDisplay from "@/components/map-display";
-import { MOCK_LOCATIONS } from "@/utils/map-location";
 import CustomCard from "@/components/ui/custom-card.tsx";
+import { MOCK_LOCATIONS } from "@/utils/map-location";
 
 // Mock data for student's SIWES progress
 const mockStudentData = {
-    name: "Blessing Eze",
+    name: "Musa Garba",
     matricNo: "S21/0123",
     site: MOCK_LOCATIONS.SIWES_SITE.name,
     supervisor: "Aisha Yusuf",
@@ -45,39 +45,34 @@ const StudentDashboard: FC = () => {
     return (
         <Box sx={{ minHeight: "100vh" }}>
             <Typography variant="h4" gutterBottom sx={{ fontWeight: 700 }}>
-                Welcome, {mockStudentData.name}
+                Welcome, {mockStudentData.name} 👋
             </Typography>
             <Typography variant="h6" color="textSecondary" sx={{ mb: 3 }}>
                 SIWES Dashboard: Progress Tracking
             </Typography>
 
             <Grid container spacing={4}>
-                {/* 1. SIWES Site Attendance Check (Participation Objective) */}
+                {/* SIWES Site Attendance Check (Location-Restricted Attendance) */}
                 <Grid size={{ xs: 12, md: 4 }}>
-                    <CustomCard sx={{ borderRadius: theme.borderRadius.large, boxShadow: theme.customShadows.card }}>
-                        <AttendanceWidget
-                            targetLocation="SIWES_SITE" // The student checks in at their SIWES site
-                            userRole="Student"
-                        />
-                    </CustomCard>
+                    <AttendanceWidget
+                        targetLocation="SIWES_SITE" // CRUCIAL: Enforces check-in at the SIWES site
+                        userRole="Student"
+                    />
                 </Grid>
 
-                {/* 2. Progress Tracking Metrics (Dashboard Objective) */}
+                {/* Progress Tracking Metrics (Dashboard Objective) */}
                 <Grid size={{ xs: 12, md: 8 }}>
                     <CustomCard
                         sx={{
-                            borderRadius: theme.borderRadius.large,
-                            boxShadow: theme.customShadows.card,
-                            p: 3,
                             height: "100%",
                         }}
                     >
                         <Typography variant="h5" sx={{ mb: 3, fontWeight: 700 }}>
-                            Internship Progress
+                            SIWES Progress Overview
                         </Typography>
 
                         <Grid container spacing={3}>
-                            <Grid size={{ xs: 12, sm: 6 }}>
+                            <Grid size={12}>
                                 <Typography variant="subtitle1" fontWeight={600} gutterBottom>
                                     Time Commitment ({hourCompletion}%)
                                 </Typography>
@@ -92,14 +87,14 @@ const StudentDashboard: FC = () => {
                                 </Typography>
                             </Grid>
 
-                            <Grid size={{ xs: 12, sm: 6 }}>
+                            <Grid size={12}>
                                 <Typography variant="subtitle1" fontWeight={600} gutterBottom>
-                                    Tasks/Logbook Completion ({taskCompletion}%)
+                                    Logbook Completion ({taskCompletion}%)
                                 </Typography>
                                 <LinearProgress
                                     variant="determinate"
                                     value={taskCompletion}
-                                    sx={{ height: 10, borderRadius: 5, bgcolor: theme.palette.grey[300] }}
+                                    sx={{ height: 10, borderRadius: 5, background: theme.palette.grey[300] }}
                                     color="success"
                                 />
                                 <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
@@ -108,40 +103,40 @@ const StudentDashboard: FC = () => {
                             </Grid>
                         </Grid>
 
-                        <Box
+                        <CustomCard
                             sx={{
-                                mt: 4,
-                                p: 2,
-                                bgcolor: theme.palette.alternate.main,
-                                borderRadius: theme.borderRadius.medium,
+                                mt: 3,
+                                background: theme.palette.alternate.main,
                             }}
                         >
                             <Typography variant="subtitle1" fontWeight={600}>
                                 Site & Supervision Details
                             </Typography>
-                            <Typography variant="body2">**Site:** {mockStudentData.site}</Typography>
-                            <Typography variant="body2">**Supervisor:** {mockStudentData.supervisor}</Typography>
-                        </Box>
+                            <Box>
+                                <Typography component={"span"} variant={"h6"}>
+                                    Location:
+                                </Typography>{" "}
+                                <Typography component={"span"} variant={"h6"} fontWeight={400}>
+                                    {mockStudentData.site}
+                                </Typography>
+                            </Box>{" "}
+                            <Box>
+                                <Typography component={"span"} variant={"h6"}>
+                                    Supervisor:
+                                </Typography>{" "}
+                                <Typography component={"span"} variant={"h6"} fontWeight={400}>
+                                    {mockStudentData.supervisor}
+                                </Typography>
+                            </Box>
+                        </CustomCard>
                     </CustomCard>
                 </Grid>
 
-                {/* 3. Map Visualization */}
+                {/* Map Visualization */}
                 <Grid size={12}>
-                    <CustomCard
-                        sx={{
-                            borderRadius: theme.borderRadius.large,
-                            boxShadow: theme.customShadows.card,
-                            overflow: "hidden",
-                            height: "400px",
-                        }}
-                    >
-                        <Box sx={{ p: 0, height: "100%", width: "100%" }}>
-                            <MapDisplay
-                                center={targetSite} // Center the map on the SIWES site
-                                markers={mapMarkers}
-                            />
-                        </Box>
-                    </CustomCard>
+                    <Box sx={{ height: "70vh", width: "100%", borderRadius: 2, overflow: "hidden" }}>
+                        <MapDisplay center={targetSite} markers={mapMarkers} />
+                    </Box>
                 </Grid>
             </Grid>
         </Box>

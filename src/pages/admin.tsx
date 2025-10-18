@@ -1,5 +1,5 @@
 import { type FC, useMemo, useState } from "react";
-import { Box, Typography, Card, CardContent, useTheme, Grid, Button } from "@mui/material";
+import { Box, Typography, Card, useTheme, Grid, Button } from "@mui/material";
 import MapDisplay from "@/components/map-display.tsx";
 import { MOCK_LOCATIONS, ABUJA_CENTER, isLocationNear } from "@/utils/map-location";
 
@@ -79,21 +79,12 @@ const AdminDashboard: FC = () => {
                 Real-time SIWES Supervisor Verification
             </Typography>
 
-            <Grid container spacing={3} sx={{ mt: 2 }}>
+            <Grid container spacing={3}>
                 {/* 1. Map Verification Display */}
                 <Grid size={{ xs: 12, md: 8 }}>
-                    <Card
-                        sx={{
-                            borderRadius: theme.borderRadius.large,
-                            boxShadow: theme.customShadows.card,
-                            height: "550px", // Fixed height for the map container
-                            overflow: "hidden",
-                        }}
-                    >
-                        <CardContent sx={{ p: 0, height: "100%", width: "100%" }}>
-                            <MapDisplay center={ABUJA_CENTER} markers={mapMarkers} />
-                        </CardContent>
-                    </Card>
+                    <Box sx={{ height: "100%", width: "100%", borderRadius: 2, overflow: "hidden" }}>
+                        <MapDisplay center={ABUJA_CENTER} markers={mapMarkers} />
+                    </Box>
                 </Grid>
 
                 {/* 2. Management Controls and Metrics */}
