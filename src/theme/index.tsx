@@ -3,11 +3,11 @@ import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { createAppTheme } from "./theme";
 
-interface ThemeProviderProps {
+interface Props {
     children: ReactNode;
 }
 
-export const ThemeProvider: FC<ThemeProviderProps> = ({ children }) => {
+export const ThemeProvider: FC<Props> = ({ children }) => {
     const theme = createAppTheme("light");
 
     return (
