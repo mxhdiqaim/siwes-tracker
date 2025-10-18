@@ -1,6 +1,10 @@
 import type { ComponentType, ReactNode } from "react";
-import HomeScreen from "../pages/home.tsx";
+import AdminScreen from "../pages/admin.tsx";
 import NotFoundScreen from "../pages/404.tsx";
+import LoginScreen from "@/pages/login-screen.tsx";
+import LecturerDashboard from "@/pages/lecturer-dashboard.tsx";
+import SupervisorDashboardScreen from "@/pages/supervisor-dashboard-screen.tsx";
+import StudentDashboardScreen from "@/pages/student-dashboard-screen.tsx";
 
 export interface AppRouteType {
     to: string;
@@ -16,36 +20,36 @@ export interface AppRouteType {
 export const appRoutes: AppRouteType[] = [
     {
         to: "/",
-        title: "Dashboard",
-        element: HomeScreen,
+        title: "Admin Dashboard",
+        element: AdminScreen,
         icon: "🏠",
     },
     {
-        to: "/send",
-        title: "Send",
-        element: HomeScreen,
+        to: "/lecturer",
+        title: "Lecturer Dashboard",
+        element: LecturerDashboard,
+        icon: "🎓",
+    },
+    {
+        to: "/supervisor",
+        title: "Supervisor Dashboard",
+        element: SupervisorDashboardScreen,
         icon: "🚀",
     },
     {
-        to: "/receive",
-        title: "Receive",
-        element: HomeScreen,
+        to: "/student",
+        title: "Student Dashboard",
+        element: StudentDashboardScreen,
         icon: "📥",
-    },
-    {
-        to: "/transactions",
-        title: "Transactions",
-        element: HomeScreen,
-        icon: "💸",
     },
 
     // Public Routes
-    // {
-    //     to: "/auth",
-    //     element: AuthScreen,
-    //     useLayout: false,
-    //     authGuard: false,
-    // },
+    {
+        to: "/login",
+        element: LoginScreen,
+        useLayout: false,
+        authGuard: false,
+    },
 
     // Error Pages
     {

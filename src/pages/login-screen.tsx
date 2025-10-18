@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 
-const AuthScreen = () => {
+const LoginScreen = () => {
     return <Box>Auth Screen</Box>;
 };
 
-export default AuthScreen;
+export default LoginScreen;

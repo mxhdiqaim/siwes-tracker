@@ -62,10 +62,7 @@ const SideBar: FC<Props> = ({ sx, drawerState, toggleDrawer, showDrawer }) => {
         return routes
             .filter((route) => {
                 // Basic filtering for hidden/auth routes
-                if (route.hidden || !(route.authGuard ?? true) || !(route.useLayout ?? true)) {
-                    return false;
-                }
-                return true;
+                return !(route.hidden || !(route.authGuard ?? true) || !(route.useLayout ?? true));
             })
             .map((route) => {
                 if (route.children) {
@@ -208,8 +205,8 @@ const SideBar: FC<Props> = ({ sx, drawerState, toggleDrawer, showDrawer }) => {
                     borderBottom: "1px solid #CFD1D3",
                 }}
             >
-                <IconButton aria-label={"NAIRAPAY"} component={Link} to={"/"} sx={{ borderRadius: 1 }}>
-                    <Icon src={"/images/bilfi_logo_big.svg"} alt={"NAIRAPAY"} sx={{ width: "100%", height: "100%" }} />
+                <IconButton aria-label={"SITR"} component={Link} to={"/"} sx={{ borderRadius: 1 }}>
+                    <Icon src={"/images/bilfi_logo_big.svg"} alt={"SITR"} sx={{ width: "100%", height: "100%" }} />
                 </IconButton>
                 {screenSize === "mobile" || screenSize === "tablet" ? (
                     <IconButton
