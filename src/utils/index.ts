@@ -6,3 +6,12 @@ export const getEnvVariable = (envKey: string) => {
 
     return value;
 };
+
+export interface StudentProgress {
+    name: string;
+    matricNo: string;
+    site: string;
+    progress: number; // 0-100
+    status: "On-site" | "Pending Report" | "Needs Visit";
+    gradeStatus: "Pending" | "Completed";
+}

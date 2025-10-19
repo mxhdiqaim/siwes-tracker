@@ -1,14 +1,15 @@
 import { type FC, useMemo, useState } from "react";
-import { Box, Typography, Card, useTheme, Grid, Button } from "@mui/material";
+import { Box, Typography, useTheme, Grid, Button, Stack } from "@mui/material";
 import MapDisplay from "@/components/map-display.tsx";
 import { MOCK_LOCATIONS, DUTSE_CENTER, isLocationNear } from "@/utils/map-location";
+import CustomCard from "@/components/ui/custom-card.tsx";
 
 // Define the marker structure based on the props accepted by MapDisplay
 interface LocationMarker {
     position: { lat: number; lng: number };
     label: string;
     icon?: string;
-    color: "success" | "error" | "warning"; // Custom property for visualisation
+    color: "success" | "error" | "warning";
 }
 
 // Mock data structure for reporting metrics
@@ -80,38 +81,23 @@ const AdminDashboard: FC = () => {
             </Typography>
 
             <Grid container spacing={3}>
-                {/* 1. Map Verification Display */}
+                {/* Map Verification Display */}
                 <Grid size={{ xs: 12, md: 8 }}>
-                    <Box sx={{ height: "100%", width: "100%", borderRadius: 2, overflow: "hidden" }}>
+                    <Box sx={{ height: "70vh", width: "100%", borderRadius: 2, overflow: "hidden" }}>
                         <MapDisplay center={DUTSE_CENTER} markers={mapMarkers} />
                     </Box>
                 </Grid>
 
-                {/* 2. Management Controls and Metrics */}
+                {/* Management Controls and Metrics */}
                 <Grid size={{ xs: 12, md: 4 }}>
-                    <Card
-                        sx={{
-                            borderRadius: theme.borderRadius.large,
-                            boxShadow: theme.customShadows.card,
-                            p: 3,
-                            height: "550px",
-                        }}
-                    >
+                    <CustomCard>
                         <Typography variant="h5" sx={{ mb: 2, fontWeight: 700 }}>
                             Management Tools
                         </Typography>
 
-                        {/* Status Check Simulation */}
-                        <Box
-                            sx={{
-                                mb: 3,
-                                p: 2,
-                                border: 1,
-                                borderColor: theme.palette.customColors.border,
-                                borderRadius: theme.borderRadius.medium,
-                            }}
-                        >
-                            <Typography variant="h6">Geo-Verification Simulation</Typography>
+                        {/* Status Check */}
+                        <Box>
+                            <Typography variant="h6">Geo-Verification</Typography>
                             <Typography variant="body2" color="textSecondary" sx={{ mb: 1 }}>
                                 Current Supervisor Status:
                                 <Box
@@ -128,45 +114,45 @@ const AdminDashboard: FC = () => {
                                 </Box>
                             </Typography>
 
-                            <Button
-                                variant="contained"
-                                color="success"
-                                size="small"
-                                onClick={() => setSupervisorLocation(MOCK_LOCATIONS.USER_CURRENT)}
-                                sx={{ mr: 1, mt: 1 }}
-                            >
-                                Simulate: At Site
-                            </Button>
-                            <Button
-                                variant="contained"
-                                color="error"
-                                size="small"
-                                onClick={() => setSupervisorLocation(MOCK_LOCATIONS.USER_FAR)}
-                                sx={{ mt: 1 }}
-                            >
-                                Simulate: Away
-                            </Button>
+                            <Stack direction="column" spacing={1}>
+                                <Button
+                                    variant="contained"
+                                    color="success"
+                                    size="small"
+                                    onClick={() => setSupervisorLocation(MOCK_LOCATIONS.USER_CURRENT)}
+                                >
+                                    Simulate: At Site
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    color="error"
+                                    size="small"
+                                    onClick={() => setSupervisorLocation(MOCK_LOCATIONS.USER_FAR)}
+                                >
+                                    Simulate: Away
+                                </Button>
+                            </Stack>
                         </Box>
 
                         {/* Bulk Download Feature (Objective Demonstration) */}
-                        <Typography variant="h6" sx={{ mt: 3, mb: 2 }}>
+                        <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>
                             Grade Reporting (Objective 5)
                         </Typography>
                         <Grid container spacing={2}>
-                            <Grid size={6}>
-                                <Button fullWidth variant="contained" color="primary">
-                                    Download Grades (Excel)
-                                </Button>
-                            </Grid>
-                            <Grid size={6}>
-                                <Button fullWidth variant="outlined" color="primary">
-                                    Generate Report (PDF)
-                                </Button>
+                            <Grid size={12}>
+                                <Stack direction="column" spacing={1}>
+                                    <Button variant="contained" color="primary">
+                                        Download Grades (Excel)
+                                    </Button>
+                                    <Button variant="outlined" color="primary">
+                                        Generate Report (PDF)
+                                    </Button>
+                                </Stack>
                             </Grid>
                         </Grid>
 
                         {/* Inefficient Tracking Demonstration */}
-                        <Typography variant="h6" sx={{ mt: 3, mb: 2 }}>
+                        <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>
                             Supervisor Check-ins
                         </Typography>
                         {mockMetrics.map((metric) => (
@@ -191,7 +177,7 @@ const AdminDashboard: FC = () => {
                                 </Typography>
                             </Box>
                         ))}
-                    </Card>
+                    </CustomCard>
                 </Grid>
             </Grid>
         </Box>
