@@ -14,7 +14,7 @@ L.Icon.Default.mergeOptions({
     shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
 });
 
-interface MapProps {
+interface Props {
     center: { lat: number; lng: number };
     markers: { position: { lat: number; lng: number }; label: string; icon?: string }[];
 }
@@ -24,16 +24,16 @@ const containerStyle = {
     height: "100%", // MapContainer needs 100% height, parent will define max-height
 };
 
-const MapDisplay: FC<MapProps> = ({ center, markers }) => {
+const MapDisplay: FC<Props> = ({ center, markers }) => {
     return (
         <MapContainer center={[center.lat, center.lng]} zoom={15} scrollWheelZoom={true} style={containerStyle}>
-            {/* 1. Add the Tile Layer (OpenStreetMap default tiles) */}
+            {/* Add the Tile Layer (OpenStreetMap default tiles) */}
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
 
-            {/* 2. Loop through Markers */}
+            {/* Loop through Markers */}
             {markers.map((marker, index) => (
                 <Marker key={index} position={[marker.position.lat, marker.position.lng]}>
                     {/* Use a Popup to display the location label */}

@@ -52,15 +52,12 @@ const StudentDashboard: FC = () => {
             </Typography>
 
             <Grid container spacing={4}>
-                {/* SIWES Site Attendance Check (Location-Restricted Attendance) */}
+                {/* 1. SIWES Site Attendance Check (Fix Grid Syntax and add CustomCard wrap) */}
                 <Grid size={{ xs: 12, md: 4 }}>
-                    <AttendanceWidget
-                        targetLocation="SIWES_SITE" // CRUCIAL: Enforces check-in at the SIWES site
-                        userRole="Student"
-                    />
+                    <AttendanceWidget targetLocation="SIWES_SITE" userRole="student" />
                 </Grid>
 
-                {/* Progress Tracking Metrics (Dashboard Objective) */}
+                {/* 2. Progress Tracking Metrics (Fix Grid Syntax) */}
                 <Grid size={{ xs: 12, md: 8 }}>
                     <CustomCard
                         sx={{
@@ -105,7 +102,7 @@ const StudentDashboard: FC = () => {
 
                         <CustomCard
                             sx={{
-                                mt: 3,
+                                mt: 2,
                                 background: theme.palette.alternate.main,
                             }}
                         >
@@ -132,7 +129,6 @@ const StudentDashboard: FC = () => {
                     </CustomCard>
                 </Grid>
 
-                {/* Map Visualization */}
                 <Grid size={12}>
                     <Box sx={{ height: "70vh", width: "100%", borderRadius: 2, overflow: "hidden" }}>
                         <MapDisplay center={targetSite} markers={mapMarkers} />

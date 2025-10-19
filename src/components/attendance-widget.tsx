@@ -4,10 +4,11 @@ import { Box, Typography, Button, useTheme, Stack } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import LocationOffIcon from "@mui/icons-material/LocationOff";
 import CustomCard from "@/components/ui/custom-card.tsx";
+import type { Status, UserRole } from "@/types";
 
 interface Pros {
     targetLocation: keyof typeof MOCK_LOCATIONS;
-    userRole: "Lecturer" | "Student" | "Supervisor";
+    userRole: UserRole;
 }
 
 const AttendanceWidget: FC<Pros> = ({ targetLocation, userRole }) => {
@@ -16,7 +17,7 @@ const AttendanceWidget: FC<Pros> = ({ targetLocation, userRole }) => {
 
     // State and Logic
     const [userLocation, setUserLocation] = useState(MOCK_LOCATIONS.USER_CURRENT);
-    const [status, setStatus] = useState<"pending" | "success" | "fail">("pending");
+    const [status, setStatus] = useState<Status>("pending");
 
     const isWithinRange = isLocationNear(userLocation, venue);
 
@@ -74,12 +75,14 @@ const AttendanceWidget: FC<Pros> = ({ targetLocation, userRole }) => {
                 <Typography variant="caption" sx={{ display: "block", mb: 1, fontWeight: 600 }}>
                     POC Simulation Controls
                 </Typography>
-                <Stack>
+                <Stack direction="column" spacing={1}>
+                    {" "}
+                    {/* Adjusted to use Stack spacing prop */}
                     <Button
                         onClick={() => setUserLocation(MOCK_LOCATIONS.USER_CURRENT)}
                         size="small"
                         variant="contained"
-                        sx={{ background: theme.palette.info.main, my: 1 }}
+                        sx={{ background: theme.palette.info.main }}
                     >
                         Simulate: At Venue
                     </Button>
@@ -87,7 +90,7 @@ const AttendanceWidget: FC<Pros> = ({ targetLocation, userRole }) => {
                         onClick={() => setUserLocation(MOCK_LOCATIONS.USER_FAR)}
                         size="small"
                         variant="contained"
-                        sx={{ background: theme.palette.warning.main, my: 1 }}
+                        sx={{ background: theme.palette.warning.main }}
                     >
                         Simulate: Away
                     </Button>

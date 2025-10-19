@@ -16,7 +16,7 @@ const LecturerDashboard: FC = () => {
         {
             position: MOCK_LOCATIONS.USER_CURRENT,
             label: "Your Current Location (Simulated)",
-            icon: "blue_dot", // Leaflet uses default pins; this label is for visualisation
+            icon: "blue_dot",
         },
     ];
 
@@ -32,10 +32,7 @@ const LecturerDashboard: FC = () => {
             <Grid container spacing={4}>
                 {/* Attendance Check Widget (Location-Restricted to CLASS_VENUE) */}
                 <Grid size={{ xs: 12, md: 4 }}>
-                    <AttendanceWidget
-                        targetLocation="CLASS_VENUE" // CRUCIAL: Enforces check-in at the JigPoly classroom
-                        userRole="Lecturer"
-                    />
+                    <AttendanceWidget targetLocation="CLASS_VENUE" userRole="lecturer" />
                 </Grid>
 
                 {/* Map Verification Display */}
