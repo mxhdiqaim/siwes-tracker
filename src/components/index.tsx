@@ -1,6 +1,6 @@
 import { Chip } from "@mui/material";
-import type { StudentProgress } from "@/utils";
 import { MOCK_LOCATIONS } from "@/utils/map-location.ts";
+import type { StudentProgress } from "@/types";
 
 export const mockStudents: StudentProgress[] = [
     {

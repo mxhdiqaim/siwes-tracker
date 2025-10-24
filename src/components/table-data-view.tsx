@@ -1,7 +1,7 @@
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import { Box, Button, Chip, Typography, useTheme } from "@mui/material";
 import { getStatusChip } from "@/components/index.tsx";
-import type { StudentProgress } from "@/utils";
+import type { StudentProgress } from "@/types";
 
 interface Props {
     mockStudents: StudentProgress[];

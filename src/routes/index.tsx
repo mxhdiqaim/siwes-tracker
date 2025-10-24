@@ -5,6 +5,7 @@ import LoginScreen from "@/pages/login-screen.tsx";
 import LecturerDashboard from "@/pages/lecturer-dashboard.tsx";
 import SupervisorDashboardScreen from "@/pages/supervisor-dashboard-screen.tsx";
 import StudentDashboardScreen from "@/pages/student-dashboard-screen.tsx";
+import WelcomeScreen from "@/pages/welcome-screen.tsx";
 
 export interface AppRouteType {
     to: string;
@@ -20,6 +21,13 @@ export interface AppRouteType {
 export const appRoutes: AppRouteType[] = [
     {
         to: "/",
+        title: "Welcome",
+        element: WelcomeScreen,
+        useLayout: false,
+        authGuard: false,
+    },
+    {
+        to: "/admin",
         title: "Admin Dashboard",
         element: AdminScreen,
         icon: "🏠",
