@@ -57,9 +57,7 @@ const WelcomeScreen = () => {
                                 <Typography variant="h5" component="h2" gutterBottom>
                                     {siwesInfo.title}
                                 </Typography>
-                                <Typography variant="body1" paragraph>
-                                    {siwesInfo.description}
-                                </Typography>
+                                <Typography variant="body1">{siwesInfo.description}</Typography>
                             </Box>
                             <Avatar
                                 alt={rector.name}
