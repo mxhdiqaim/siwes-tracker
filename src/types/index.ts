@@ -5,6 +5,7 @@ export type UserRole = "lecturer" | "student" | "supervisor";
 export type Status = "pending" | "success" | "fail";
 
 export interface StudentProgress {
+    id: number;
     name: string;
     matricNo: string;
     site: string;

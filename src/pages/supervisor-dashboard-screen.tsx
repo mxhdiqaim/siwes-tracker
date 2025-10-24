@@ -1,12 +1,13 @@
 import { useMemo, type FC } from "react";
-import { Box, Typography, Grid, useTheme } from "@mui/material";
+import { Box, Typography, Grid, useTheme, Chip, Button } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import MapDisplay from "@/components/map-display.tsx";
 import AttendanceWidget from "@/components/attendance-widget.tsx";
 import CustomCard from "@/components/ui/custom-card.tsx";
 import { MOCK_LOCATIONS, DUTSE_CENTER } from "@/utils/map-location";
-import { mockStudents } from "@/components";
+import { getStatusChip, mockStudents } from "@/components";
 import TableDataView from "@/components/table-data-view.tsx";
+import type { GridColDef } from "@mui/x-data-grid";
 
 const SupervisorDashboard: FC = () => {
     const theme = useTheme();
@@ -27,6 +28,66 @@ const SupervisorDashboard: FC = () => {
             },
         ];
     }, [targetSite]);
+
+    const columns: GridColDef[] = [
+        {
+            field: "name",
+            headerName: "Name/Matric",
+            minWidth: 200,
+            flex: 1,
+            renderCell: (params) => (
+                <Box>
+                    <Typography variant="body2" fontWeight={600}>
+                        {params.row.name}
+                    </Typography>
+                    <Typography variant="caption" color="textSecondary">
+                        {params.row.matricNo}
+                    </Typography>
+                </Box>
+            ),
+        },
+        { field: "site", headerName: "Site", minWidth: 180, flex: 1 },
+        {
+            field: "status",
+            headerName: "Activity Status",
+            minWidth: 150,
+            flex: 1,
+            renderCell: (params) => getStatusChip(params.value),
+        },
+        {
+            field: "gradeStatus",
+            headerName: "Grade Status",
+            minWidth: 150,
+            flex: 1,
+            renderCell: (params) => (
+                <Chip
+                    label={params.value}
+                    size="small"
+                    color={params.value === "Completed" ? "success" : "warning"}
+                    sx={{ fontWeight: 600 }}
+                />
+            ),
+        },
+        {
+            field: "action",
+            headerName: "Action",
+            minWidth: 150,
+            flex: 1,
+            sortable: false,
+            renderCell: (params) => (
+                <Button
+                    variant="contained"
+                    size="small"
+                    color="primary"
+                    disabled={params.row.gradeStatus === "Completed"}
+                    sx={{ textTransform: "none" }}
+                    onClick={() => console.log(`Opening grading modal for ${params.row.name}`)}
+                >
+                    {params.row.gradeStatus === "Completed" ? "View Grade" : "Assess/Grade"}
+                </Button>
+            ),
+        },
+    ];
 
     return (
         <Box sx={{ minHeight: "100vh" }}>
@@ -83,7 +144,7 @@ const SupervisorDashboard: FC = () => {
 
                 {/* Student Progress Tracking & Grading (People Management/Reporting) */}
                 <Grid size={12}>
-                    <TableDataView mockStudents={mockStudents} />
+                    <TableDataView data={mockStudents} columns={columns} />
                 </Grid>
             </Grid>
         </Box>

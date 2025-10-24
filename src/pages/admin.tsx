@@ -1,185 +1,214 @@
-import { type FC, useMemo, useState } from "react";
-import { Box, Typography, useTheme, Grid, Button, Stack } from "@mui/material";
-import MapDisplay from "@/components/map-display.tsx";
-import { MOCK_LOCATIONS, DUTSE_CENTER, isLocationNear } from "@/utils/map-location";
+import { type FC } from "react";
+import { AppBar, Box, Button, Grid, Toolbar, Typography, styled, useTheme } from "@mui/material";
 import CustomCard from "@/components/ui/custom-card.tsx";
+import type { GridColDef } from "@mui/x-data-grid";
+import TableDataView from "@/components/table-data-view.tsx";
 
-// Define the marker structure based on the props accepted by MapDisplay
-interface LocationMarker {
-    position: { lat: number; lng: number };
-    label: string;
-    icon?: string;
-    color: "success" | "error" | "warning";
-}
+// Styled component for the hidden file input
+const VisuallyHiddenInput = styled("input")({
+    clip: "rect(0 0 0 0)",
+    clipPath: "inset(50%)",
+    height: 1,
+    overflow: "hidden",
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    whiteSpace: "nowrap",
+    width: 1,
+});
 
-// Mock data structure for reporting metrics
-interface SiwesSiteMetric {
-    siteName: string;
-    supervisor: string;
-    status: "Verified" | "Unverified" | "Late";
-    lastCheckIn: string;
-    isNearCheckIn: boolean;
-}
+const attendanceLogs = [
+    {
+        id: 1,
+        name: "Dr. Musa Bello",
+        course: "CIT 201",
+        date: "2025-10-18",
+        timeIn: "08:10 AM",
+        location: "Main Campus",
+        status: "Present",
+    },
+    {
+        id: 2,
+        name: "Mrs. Amina Ali",
+        course: "ENG 103",
+        date: "2025-10-18",
+        timeIn: "09:05 AM",
+        location: "Campus Annex",
+        status: "Present",
+    },
+    {
+        id: 3,
+        name: "Engr. Usman Yakubu",
+        course: "EEE 204",
+        date: "2025-10-18",
+        timeIn: "10:00 AM",
+        location: "Engineering Block",
+        status: "Present",
+    },
+    {
+        id: 4,
+        name: "Mr. Danjuma Sani",
+        course: "MTH 102",
+        date: "2025-10-17",
+        timeIn: "08:45 AM",
+        location: "Science Block",
+        status: "Late",
+    },
+    {
+        id: 5,
+        name: "Dr. Hadiza Ibrahim",
+        course: "CSC 301",
+        date: "2025-10-17",
+        timeIn: "—",
+        location: "N/A",
+        status: "Absent",
+    },
+];
 
 const AdminDashboard: FC = () => {
     const theme = useTheme();
 
-    // State to simulate a switch between nearby and far locations for verification check
-    const [supervisorLocation, setSupervisorLocation] = useState(MOCK_LOCATIONS.USER_CURRENT);
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, fileType: string) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            alert(`${fileType} file "${file.name}" selected successfully!`);
+        }
+    };
 
-    // Mock Metric Data (showing one verified, one unverified)
-    const mockMetrics: SiwesSiteMetric[] = useMemo(
-        () => [
-            {
-                siteName: MOCK_LOCATIONS.SIWES_SITE.name,
-                supervisor: "Aisha Yusuf",
-                status: "Verified",
-                lastCheckIn: "10:15 AM",
-                isNearCheckIn: isLocationNear(supervisorLocation, MOCK_LOCATIONS.SIWES_SITE),
-            },
-            {
-                siteName: MOCK_LOCATIONS.CLASS_VENUE.name,
-                supervisor: "Dr. Chris Obi",
-                status: "Late",
-                lastCheckIn: "N/A",
-                isNearCheckIn: isLocationNear(MOCK_LOCATIONS.USER_FAR, MOCK_LOCATIONS.CLASS_VENUE),
-            },
-        ],
-        [supervisorLocation],
-    );
+    const getStatusColor = (status: string) => {
+        switch (status) {
+            case "Present":
+                return theme.palette.success.main;
+            case "Late":
+                return theme.palette.warning.main;
+            case "Absent":
+                return theme.palette.error.main;
+            default:
+                return theme.palette.text.primary;
+        }
+    };
 
-    // Prepare the Markers using the MOCK_LOCATIONS data
-    const mapMarkers: LocationMarker[] = useMemo(() => {
-        const siteMarker = {
-            position: MOCK_LOCATIONS.SIWES_SITE,
-            label: `Required: ${MOCK_LOCATIONS.SIWES_SITE.name}`,
-            color: "success" as const,
-        };
-
-        const supervisorMarker = {
-            position: supervisorLocation,
-            label: `Supervisor: Location Verified: ${mockMetrics[0].isNearCheckIn ? "YES" : "NO"}`,
-            color: mockMetrics[0].isNearCheckIn ? ("success" as const) : ("error" as const),
-        };
-
-        return [siteMarker, supervisorMarker];
-    }, [mockMetrics, supervisorLocation]);
+    const columns: GridColDef[] = [
+        { field: "name", headerName: "Lecturer Name", flex: 1 },
+        { field: "course", headerName: "Course", flex: 1 },
+        { field: "date", headerName: "Date", flex: 1 },
+        { field: "timeIn", headerName: "Time In", flex: 1 },
+        { field: "location", headerName: "Location", flex: 1 },
+        {
+            field: "status",
+            headerName: "Status",
+            flex: 1,
+            renderCell: (params) => (
+                <Typography sx={{ color: getStatusColor(params.value), fontWeight: "bold" }}>{params.value}</Typography>
+            ),
+        },
+    ];
 
     return (
-        <Box sx={{ minHeight: "100vh" }}>
-            <Typography
-                variant="h4"
-                sx={{
-                    fontWeight: theme.typography.h4.fontWeight,
-                    color: theme.palette.text.primary,
-                }}
-            >
-                Centralized Administrator Dashboard
-            </Typography>
-            <Typography variant="h6" color="textSecondary" gutterBottom>
-                Real-time SIWES Supervisor Verification
-            </Typography>
+        <Box sx={{ backgroundColor: "grey.100", minHeight: "100vh" }}>
+            <AppBar position="static" sx={{ backgroundColor: "primary.dark" }}>
+                <Toolbar>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        Admin Dashboard - GPS Lecturer Tracking
+                    </Typography>
+                </Toolbar>
+            </AppBar>
 
-            <Grid container spacing={3}>
-                {/* Map Verification Display */}
-                <Grid size={{ xs: 12, md: 8 }}>
-                    <Box sx={{ height: "70vh", width: "100%", borderRadius: 2, overflow: "hidden" }}>
-                        <MapDisplay center={DUTSE_CENTER} markers={mapMarkers} />
-                    </Box>
-                </Grid>
-
-                {/* Management Controls and Metrics */}
-                <Grid size={{ xs: 12, md: 4 }}>
-                    <CustomCard>
-                        <Typography variant="h5" sx={{ mb: 2, fontWeight: 700 }}>
-                            Management Tools
-                        </Typography>
-
-                        {/* Status Check */}
-                        <Box>
-                            <Typography variant="h6">Geo-Verification</Typography>
-                            <Typography variant="body2" color="textSecondary" sx={{ mb: 1 }}>
-                                Current Supervisor Status:
-                                <Box
-                                    component="span"
-                                    sx={{
-                                        color: mockMetrics[0].isNearCheckIn
-                                            ? theme.palette.success.main
-                                            : theme.palette.error.main,
-                                        fontWeight: "bold",
-                                        ml: 1,
-                                    }}
-                                >
-                                    {mockMetrics[0].isNearCheckIn ? "Verified (Near Site)" : "Unverified (Far Away)"}
-                                </Box>
+            <Box sx={{ p: 3 }}>
+                <Grid container spacing={3}>
+                    {/* Management Cards */}
+                    <Grid size={{ xs: 12, md: 4 }}>
+                        <CustomCard>
+                            <Typography variant="h5" component="h3" fontWeight="bold" gutterBottom>
+                                Manage Lecturers
                             </Typography>
-
-                            <Stack direction="column" spacing={1}>
-                                <Button
-                                    variant="contained"
-                                    color="success"
-                                    size="small"
-                                    onClick={() => setSupervisorLocation(MOCK_LOCATIONS.USER_CURRENT)}
-                                >
-                                    Simulate: At Site
+                            <Typography color="text.secondary">Add, edit, or bulk upload lecturer profiles.</Typography>
+                            <Box sx={{ mt: 2, display: "flex", gap: 1 }}>
+                                <Button variant="contained" color="primary">
+                                    Open
                                 </Button>
-                                <Button
-                                    variant="contained"
-                                    color="error"
-                                    size="small"
-                                    onClick={() => setSupervisorLocation(MOCK_LOCATIONS.USER_FAR)}
-                                >
-                                    Simulate: Away
+                                <Button component="label" variant="contained" color="success">
+                                    Bulk Upload
+                                    <VisuallyHiddenInput
+                                        type="file"
+                                        accept=".csv, .xlsx"
+                                        onChange={(e) => handleFileChange(e, "Lecturers list")}
+                                    />
                                 </Button>
-                            </Stack>
-                        </Box>
-
-                        {/* Bulk Download Feature (Objective Demonstration) */}
-                        <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>
-                            Grade Reporting (Objective 5)
-                        </Typography>
-                        <Grid container spacing={2}>
-                            <Grid size={12}>
-                                <Stack direction="column" spacing={1}>
-                                    <Button variant="contained" color="primary">
-                                        Download Grades (Excel)
-                                    </Button>
-                                    <Button variant="outlined" color="primary">
-                                        Generate Report (PDF)
-                                    </Button>
-                                </Stack>
-                            </Grid>
-                        </Grid>
-
-                        {/* Inefficient Tracking Demonstration */}
-                        <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>
-                            Supervisor Check-ins
-                        </Typography>
-                        {mockMetrics.map((metric) => (
-                            <Box
-                                key={metric.siteName}
-                                sx={{
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                    py: 1,
-                                    borderBottom: `1px solid ${theme.palette.customColors.divider}`,
-                                }}
-                            >
-                                <Typography variant="body1">{metric.supervisor}</Typography>
-                                <Typography
-                                    variant="body1"
-                                    sx={{
-                                        color: theme.palette[metric.status === "Verified" ? "success" : "error"].main,
-                                        fontWeight: 600,
-                                    }}
-                                >
-                                    {metric.status}
-                                </Typography>
                             </Box>
-                        ))}
-                    </CustomCard>
+                            <Typography variant="caption" color="text.secondary" display="block" mt={1}>
+                                Accepted format: .csv or .xlsx
+                            </Typography>
+                        </CustomCard>
+                    </Grid>
+
+                    <Grid size={{ xs: 12, md: 4 }}>
+                        <CustomCard>
+                            <Typography variant="h5" component="h3" fontWeight="bold" gutterBottom>
+                                Schedules
+                            </Typography>
+                            <Typography color="text.secondary">Upload or manage teaching schedules.</Typography>
+                            <Box sx={{ mt: 2, display: "flex", gap: 1 }}>
+                                <Button variant="contained" color="primary">
+                                    Open
+                                </Button>
+                                <Button component="label" variant="contained" color="success">
+                                    Bulk Upload
+                                    <VisuallyHiddenInput
+                                        type="file"
+                                        accept=".csv, .xlsx"
+                                        onChange={(e) => handleFileChange(e, "Teaching schedule")}
+                                    />
+                                </Button>
+                            </Box>
+                            <Typography variant="caption" color="text.secondary" display="block" mt={1}>
+                                Accepted format: .csv or .xlsx
+                            </Typography>
+                        </CustomCard>
+                    </Grid>
+
+                    <Grid size={{ xs: 12, md: 4 }}>
+                        <CustomCard>
+                            <Typography variant="h5" component="h3" fontWeight="bold" gutterBottom>
+                                Students List
+                            </Typography>
+                            <Typography color="text.secondary">Upload or update students' information.</Typography>
+                            <Box sx={{ mt: 2, display: "flex", gap: 1 }}>
+                                <Button variant="contained" color="primary">
+                                    View Students
+                                </Button>
+                                <Button component="label" variant="contained" color="success">
+                                    Bulk Upload
+                                    <VisuallyHiddenInput
+                                        type="file"
+                                        accept=".csv, .xlsx"
+                                        onChange={(e) => handleFileChange(e, "Students list")}
+                                    />
+                                </Button>
+                            </Box>
+                            <Typography variant="caption" color="text.secondary" display="block" mt={1}>
+                                Accepted format: .csv or .xlsx
+                            </Typography>
+                        </CustomCard>
+                    </Grid>
+
+                    {/* Attendance Logs Table */}
+                    <Grid size={12}>
+                        <CustomCard>
+                            <Typography variant="h5" component="h3" fontWeight="bold" gutterBottom>
+                                Attendance Logs
+                            </Typography>
+                            <Typography color="text.secondary" mb={2}>
+                                Recent lecturer attendance records.
+                            </Typography>
+                            <TableDataView data={attendanceLogs} columns={columns} />
+                            <Button variant="contained" fullWidth sx={{ mt: 2 }}>
+                                View Full Report
+                            </Button>
+                        </CustomCard>
+                    </Grid>
                 </Grid>
-            </Grid>
+            </Box>
         </Box>
     );
 };
