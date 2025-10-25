@@ -1,7 +1,5 @@
-import { getApiError } from "@/helpers/get-api-error";
 import useNotifier from "@/hooks/use-notifier";
-import { useLoginMutation } from "@/store/slice";
-import { loginUserType, type LoginUserType } from "@/types/user-types";
+import { loginUserType, type LoginUserType } from "@/types/user-type";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
     Box,
@@ -14,6 +12,7 @@ import {
     Typography,
     useTheme,
 } from "@mui/material";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
@@ -27,10 +26,8 @@ const Login = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const notify = useNotifier();
-    const [login, { isLoading: loading }] = useLoginMutation();
-    // const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-    // Get the path the user was trying to access before being redirected
     const from = location.state?.from?.pathname || "/";
 
     const {
@@ -44,32 +41,27 @@ const Login = () => {
         resolver: yupResolver(loginUserType),
     });
 
-    const onSubmit = async (data: LoginUserType) => {
-        try {
-            // The login mutation returns a promise.
-            // .unwrap() will throw an error on failure, which is caught by the catch block.
-            await login(data).unwrap();
+    const onSubmit = (data: LoginUserType) => {
+        setLoading(true);
 
-            // On successful login, navigate to the intended page or a default.
-            navigate(from, { replace: true });
-
-            notify("Successfully login", "success");
-        } catch (err) {
-            // 2. Use the getApiError helper for clean, consistent error parsing
-            const defaultMessage = "Something went wrong. Please try again.";
-            const apiError = getApiError(err, defaultMessage);
-
-            notify(apiError.message, "error");
-
-            setError("email", { type: "manual" });
-            setError("password", { type: "manual" });
-        }
+        // Simulate API call
+        setTimeout(() => {
+            if (data.email === "admin@demo.com" && data.password === "password") {
+                navigate(from, { replace: true });
+                notify("Successfully logged in", "success");
+            } else {
+                notify("Invalid email or password", "error");
+                setError("email", { type: "manual", message: "Invalid credentials" });
+                setError("password", { type: "manual", message: "Invalid credentials" });
+            }
+            setLoading(false);
+        }, 1500);
     };
 
     return (
         <Grid container spacing={2}>
             <Grid
-                size={12} // Added xs prop for responsiveness
+                size={12}
                 sx={{
                     display: "flex",
                     justifyContent: "center",
@@ -107,7 +99,7 @@ const Login = () => {
                                         onChange={onChange}
                                         error={Boolean(errors.email)}
                                         placeholder="admin@demo.com"
-                                        sx={{ borderRadius: theme.borderRadius.small }}
+                                        sx={{ borderRadius: theme.shape.borderRadius }}
                                     />
                                 )}
                             />
@@ -130,7 +122,7 @@ const Login = () => {
                                         error={Boolean(errors.password)}
                                         type={"password"}
                                         placeholder="password"
-                                        sx={{ borderRadius: theme.borderRadius.small }}
+                                        sx={{ borderRadius: theme.shape.borderRadius }}
                                     />
                                 )}
                             />
@@ -156,9 +148,9 @@ const Login = () => {
                                 type="submit"
                                 variant="contained"
                                 sx={{
-                                    width: "100%", // Make the button full width
+                                    width: "100%",
                                     color: "#fff",
-                                    borderRadius: theme.borderRadius.small,
+                                    borderRadius: theme.shape.borderRadius,
                                     p: 2,
                                     mb: 2,
                                 }}
