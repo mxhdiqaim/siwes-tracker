@@ -1,3 +1,4 @@
+import { dummyUsers } from "@/data/users";
 import useNotifier from "@/hooks/use-notifier";
 import { loginUserType, type LoginUserType } from "@/types/user-type";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -46,12 +47,16 @@ const Login = () => {
 
         // Simulate API call
         setTimeout(() => {
-            if (data.email === "admin@demo.com" && data.password === "password") {
+            const user = dummyUsers.find((u) => u.email === data.email && u.password === data.password);
+
+            if (user) {
                 localStorage.setItem("isAuthenticated", "true");
+                localStorage.setItem("userRole", user.role);
                 navigate(from, { replace: true });
                 notify("Successfully logged in", "success");
             } else {
                 localStorage.removeItem("isAuthenticated");
+                localStorage.removeItem("userRole");
                 notify("Invalid email or password", "error");
                 setError("email", { type: "manual", message: "Invalid credentials" });
                 setError("password", { type: "manual", message: "Invalid credentials" });
@@ -86,7 +91,7 @@ const Login = () => {
                             Welcome Back! Login to your account
                         </Typography>
                     </Box>
-                    <Box component={"form"} noValidate autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+                    <form noValidate autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
                         <FormControl fullWidth>
                             <Controller
                                 name="email"
@@ -169,7 +174,7 @@ const Login = () => {
                                 </Button>
                             </Typography>
                         </Box>
-                    </Box>
+                    </form>
                 </Box>
             </Grid>
         </Grid>
