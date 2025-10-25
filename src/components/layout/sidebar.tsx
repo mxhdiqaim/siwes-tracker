@@ -4,6 +4,7 @@ import { appRoutes, type AppRouteType } from "@/routes";
 
 import {
     Box,
+    Button,
     Collapse,
     Drawer,
     IconButton,
@@ -17,14 +18,14 @@ import {
     useTheme,
 } from "@mui/material";
 import { type FC, Fragment, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import type { Props as AppBarProps } from "./appbar";
 
-import CollapseSvgIcon from "@/assets/collapse.svg";
 import CancelSvgIcon from "@/assets/cancel.svg";
+import CollapseSvgIcon from "@/assets/collapse.svg";
+import { LogoutOutlined } from "@mui/icons-material";
 import ExpandLessOutlinedIcon from "@mui/icons-material/ExpandLessOutlined";
 import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
-// import { LogoutOutlined } from "@mui/icons-material";
 
 interface Props extends AppBarProps {
     sx?: SxProps<Theme>;
@@ -34,12 +35,13 @@ interface Props extends AppBarProps {
 const SideBar: FC<Props> = ({ sx, drawerState, toggleDrawer, showDrawer }) => {
     const theme = useTheme();
     const location = useLocation();
+    const navigate = useNavigate();
     const screenSize = useScreenSize();
-    // const { signOut, isLoading } = useSignOut();
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
 
     const [expandedItems, setExpandedItems] = useState<string[]>([]);
 
-    // function to handle both drawer close and menu expands
+    // the function to handle both drawer close and menu expands
     const handleItemClick = (route: AppRouteType) => {
         if (showDrawer) return;
 
@@ -72,13 +74,15 @@ const SideBar: FC<Props> = ({ sx, drawerState, toggleDrawer, showDrawer }) => {
             });
     };
 
-    // const handleSignOut = async () => {
-    //     try {
-    //         await signOut();
-    //     } catch (error) {
-    //         console.error("Sign out failed:", error);
-    //     }
-    // };
+    const handleSignOut = () => {
+        setIsLoggingOut(true);
+        setTimeout(() => {
+            localStorage.removeItem("isAuthenticated");
+            localStorage.removeItem("userRole");
+            setIsLoggingOut(false);
+            navigate("/login");
+        }, 500);
+    };
 
     const renderMenuItem = (route: AppRouteType, index: number, level: number = 0, parentPath: string = "") => {
         const fullPath = parentPath + route.to;
@@ -153,13 +157,7 @@ const SideBar: FC<Props> = ({ sx, drawerState, toggleDrawer, showDrawer }) => {
                                     fontSize: 20,
                                     color: theme.palette.text.secondary,
                                 }}
-                            >
-                                {/*{isExpanded ? (*/}
-                                {/*    <Icon src={ArrowUpSvgIcon} alt={"Arrow Up"} sx={{ width: 30 }} />*/}
-                                {/*) : (*/}
-                                {/*    <Icon src={ArrowDownSvgIcon} alt={"Arrow Down"} sx={{ width: 15 }} />*/}
-                                {/*)}*/}
-                            </Box>
+                            ></Box>
                         )}
                     </ListItemButton>
                 </ListItem>
@@ -228,34 +226,34 @@ const SideBar: FC<Props> = ({ sx, drawerState, toggleDrawer, showDrawer }) => {
                     {filterRoutes(appRoutes).map((route, index) => renderMenuItem(route, index))}
                 </Box>
 
-                {/*<Box position={"absolute"} bottom={0} width={"100%"} p={2}>*/}
-                {/*    <Button*/}
-                {/*        fullWidth*/}
-                {/*        onClick={handleSignOut}*/}
-                {/*        disabled={isLoading}*/}
-                {/*        variant="contained"*/}
-                {/*        startIcon={<LogoutOutlined />}*/}
-                {/*        sx={{*/}
-                {/*            backgroundColor: theme.palette.error.main,*/}
-                {/*            color: theme.palette.error.contrastText,*/}
-                {/*            justifyContent: "flex-start",*/}
-                {/*            py: 1.5,*/}
-                {/*            px: 2,*/}
-                {/*            boxShadow: theme.customShadows.button,*/}
-                {/*            transition: theme.transitions.create(["background-color", "transform"], {*/}
-                {/*                duration: theme.transitions.duration.short,*/}
-                {/*            }),*/}
-                {/*            "&:hover": {*/}
-                {/*                // Darken the button on hover for clear visual feedback*/}
-                {/*                backgroundColor: theme.palette.error.dark,*/}
-                {/*                // Add a subtle scale effect for a modern feel*/}
-                {/*                transform: "scale(1.02)",*/}
-                {/*            },*/}
-                {/*        }}*/}
-                {/*    >*/}
-                {/*        {isLoading ? "Logging out..." : "Logout"}*/}
-                {/*    </Button>*/}
-                {/*</Box>*/}
+                <Box position={"absolute"} bottom={0} width={"100%"} p={2}>
+                    <Button
+                        fullWidth
+                        onClick={handleSignOut}
+                        disabled={isLoggingOut}
+                        variant="contained"
+                        startIcon={<LogoutOutlined />}
+                        sx={{
+                            backgroundColor: theme.palette.error.main,
+                            color: theme.palette.error.contrastText,
+                            justifyContent: "flex-start",
+                            py: 1.5,
+                            px: 2,
+                            boxShadow: theme.customShadows.button,
+                            transition: theme.transitions.create(["background-color", "transform"], {
+                                duration: theme.transitions.duration.short,
+                            }),
+                            "&:hover": {
+                                // Darken the button on hover for clear visual feedback
+                                backgroundColor: theme.palette.error.dark,
+                                // Add a subtle scale effect for a modern feel
+                                transform: "scale(1.02)",
+                            },
+                        }}
+                    >
+                        {isLoggingOut ? "Logging out..." : "Logout"}
+                    </Button>
+                </Box>
             </List>
         </Drawer>
     );
