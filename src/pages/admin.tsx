@@ -105,7 +105,7 @@ const AdminDashboard: FC = () => {
     ];
 
     return (
-        <Box sx={{ backgroundColor: "grey.100", minHeight: "100vh" }}>
+        <Box sx={{ minHeight: "100vh" }}>
             <AppBar position="static" sx={{ backgroundColor: "primary.dark" }}>
                 <Toolbar>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
@@ -114,7 +114,7 @@ const AdminDashboard: FC = () => {
                 </Toolbar>
             </AppBar>
 
-            <Box sx={{ p: 3 }}>
+            <Box sx={{ my: 2 }}>
                 <Grid container spacing={3}>
                     {/* Management Cards */}
                     <Grid size={{ xs: 12, md: 4 }}>

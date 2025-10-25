@@ -12,10 +12,10 @@ const PASSWORD_RULES = {
 } as const;
 
 export const UserRoleEnum = {
-    MANAGER: "manager",
     ADMIN: "admin",
-    USER: "user",
-    GUEST: "guest",
+    SUPERVISOR: "supervisor",
+    LECTURER: "lecturer",
+    STUDENT: "student",
 } as const;
 
 export const UserStatusEnum = {
@@ -63,7 +63,7 @@ export const baseUserSchema = yup.object().shape({
         // Otherwise, the field is optional and not required.
         otherwise: (schema) => schema.notRequired(),
     }),
-    role: yup.string().oneOf(USER_ROLES).default("user"),
+    role: yup.string().oneOf(USER_ROLES).default("student"),
     status: yup.string().oneOf(USER_STATUSES).default("active"),
     storeId: yup.string().uuid().required("Store must be selected"),
     // store: storeSchema.optional().nullable(), // Optional store object for user
