@@ -47,9 +47,11 @@ const Login = () => {
         // Simulate API call
         setTimeout(() => {
             if (data.email === "admin@demo.com" && data.password === "password") {
+                localStorage.setItem("isAuthenticated", "true");
                 navigate(from, { replace: true });
                 notify("Successfully logged in", "success");
             } else {
+                localStorage.removeItem("isAuthenticated");
                 notify("Invalid email or password", "error");
                 setError("email", { type: "manual", message: "Invalid credentials" });
                 setError("password", { type: "manual", message: "Invalid credentials" });
@@ -84,7 +86,7 @@ const Login = () => {
                             Welcome Back! Login to your account
                         </Typography>
                     </Box>
-                    <form noValidate autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+                    <Box component={"form"} noValidate autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
                         <FormControl fullWidth>
                             <Controller
                                 name="email"
@@ -167,7 +169,7 @@ const Login = () => {
                                 </Button>
                             </Typography>
                         </Box>
-                    </form>
+                    </Box>
                 </Box>
             </Grid>
         </Grid>
