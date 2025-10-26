@@ -6,6 +6,7 @@ import LecturerDashboard from "@/pages/lecturer-dashboard.tsx";
 import SupervisorDashboardScreen from "@/pages/supervisor-dashboard-screen.tsx";
 import StudentDashboardScreen from "@/pages/student-dashboard-screen.tsx";
 import WelcomeScreen from "@/pages/welcome-screen.tsx";
+import { type UserRole, UserRoleEnum } from "@/types/user-type.ts";
 
 export interface AppRouteType {
     to: string;
@@ -16,6 +17,7 @@ export interface AppRouteType {
     authGuard?: boolean;
     hidden?: boolean; // True = Hide from the sidebar, but it accessed through navigation
     children?: AppRouteType[];
+    roles?: UserRole[];
 }
 
 export const appRoutes: AppRouteType[] = [
@@ -31,24 +33,28 @@ export const appRoutes: AppRouteType[] = [
         title: "Admin Dashboard",
         element: AdminScreen,
         icon: "🏠",
+        roles: [UserRoleEnum.ADMIN],
     },
     {
         to: "/supervisor",
         title: "Supervisor Dashboard",
         element: SupervisorDashboardScreen,
         icon: "🚀",
+        roles: [UserRoleEnum.ADMIN, UserRoleEnum.SUPERVISOR],
     },
     {
         to: "/lecturer",
         title: "Lecturer Dashboard",
         element: LecturerDashboard,
         icon: "🎓",
+        roles: [UserRoleEnum.ADMIN, UserRoleEnum.SUPERVISOR, UserRoleEnum.LECTURER],
     },
     {
         to: "/student",
         title: "Student Dashboard",
         element: StudentDashboardScreen,
         icon: "📥",
+        roles: [UserRoleEnum.ADMIN, UserRoleEnum.STUDENT],
     },
 
     // Public Routes

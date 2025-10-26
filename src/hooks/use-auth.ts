@@ -1,22 +1,24 @@
-import type { UserRole } from "@/types/user-type";
+import type { UserType } from "@/types/user-type";
 import { useEffect, useState } from "react";
 
 export const useAuthStatus = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [userRole, setUserRole] = useState<UserRole | null>(null);
+    const [user, setUser] = useState<UserType | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const checkAuth = () => {
             try {
                 const authFlag = localStorage.getItem("isAuthenticated");
-                const role = localStorage.getItem("userRole") as UserRole | null;
-                setIsAuthenticated(authFlag === "true");
-                setUserRole(role);
+                const userString = localStorage.getItem("user");
+                const parsedUser: UserType | null = userString ? JSON.parse(userString) : null;
+
+                setIsAuthenticated(authFlag === "true" && !!parsedUser);
+                setUser(parsedUser);
             } catch (error) {
-                console.error("Could not access localStorage", error);
+                console.error("Could not access localStorage or parse user data", error);
                 setIsAuthenticated(false);
-                setUserRole(null);
+                setUser(null);
             } finally {
                 setIsLoading(false);
             }
@@ -25,7 +27,7 @@ export const useAuthStatus = () => {
         checkAuth();
 
         const handleStorageChange = (event: StorageEvent) => {
-            if (event.key === "isAuthenticated" || event.key === "userRole") {
+            if (event.key === "isAuthenticated" || event.key === "user") {
                 checkAuth();
             }
         };
@@ -38,5 +40,5 @@ export const useAuthStatus = () => {
     }, []);
 
     // Since this is a simulation, we assume the server is always okay.
-    return { isLoading, isAuthenticated, userRole, isServerOk: true };
+    return { isLoading, isAuthenticated, user, isServerOk: true };
 };

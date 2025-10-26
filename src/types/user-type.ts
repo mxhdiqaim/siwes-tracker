@@ -31,7 +31,6 @@ export const USER_STATUSES = Object.values(UserStatusEnum);
 
 // export type UserRoleType = (typeof USER_ROLES)[number];
 export type UserRole = (typeof USER_ROLES)[keyof typeof USER_ROLES];
-export type UserStatus = (typeof USER_STATUSES)[number];
 
 // Schema for creating a new user without ID, createdAt & updatedAt fields
 export const baseUserSchema = yup.object().shape({
@@ -55,18 +54,8 @@ export const baseUserSchema = yup.object().shape({
         .string()
         .required("Please confirm your password")
         .oneOf([yup.ref("password")], "Passwords must match"),
-    phone: yup.string().when({
-        // The 'is' condition checks if the phone field is not empty.
-        is: (val: string) => val && val.length > 0,
-        // If it's not empty, then it must be exactly 11 digits.
-        then: (schema) => schema.matches(/^[0-9]{11}$/, "If provided, the phone number must be exactly 11 digits"),
-        // Otherwise, the field is optional and not required.
-        otherwise: (schema) => schema.notRequired(),
-    }),
     role: yup.string().oneOf(USER_ROLES).default("student"),
     status: yup.string().oneOf(USER_STATUSES).default("active"),
-    storeId: yup.string().uuid().required("Store must be selected"),
-    // store: storeSchema.optional().nullable(), // Optional store object for user
 });
 
 export const createUserSchema = baseUserSchema;

@@ -51,12 +51,12 @@ const Login = () => {
 
             if (user) {
                 localStorage.setItem("isAuthenticated", "true");
-                localStorage.setItem("userRole", user.role);
+                localStorage.setItem("user", JSON.stringify(user));
                 navigate(from, { replace: true });
                 notify("Successfully logged in", "success");
             } else {
                 localStorage.removeItem("isAuthenticated");
-                localStorage.removeItem("userRole");
+                localStorage.removeItem("user");
                 notify("Invalid email or password", "error");
                 setError("email", { type: "manual", message: "Invalid credentials" });
                 setError("password", { type: "manual", message: "Invalid credentials" });

@@ -1,6 +1,8 @@
 import Icon from "@/components/ui/icon.tsx";
+import { useAuthStatus } from "@/hooks/use-auth.ts";
 import useScreenSize from "@/hooks/use-screen-size.ts";
 import { appRoutes, type AppRouteType } from "@/routes";
+import { UserRoleEnum } from "@/types/user-type.ts";
 
 import {
     Box,
@@ -34,6 +36,7 @@ interface Props extends AppBarProps {
 
 const SideBar: FC<Props> = ({ sx, drawerState, toggleDrawer, showDrawer }) => {
     const theme = useTheme();
+    const { user } = useAuthStatus();
     const location = useLocation();
     const navigate = useNavigate();
     const screenSize = useScreenSize();
@@ -63,22 +66,50 @@ const SideBar: FC<Props> = ({ sx, drawerState, toggleDrawer, showDrawer }) => {
     const filterRoutes = (routes: AppRouteType[]): AppRouteType[] => {
         return routes
             .filter((route) => {
-                // Basic filtering for hidden/auth routes
-                return !(route.hidden || !(route.authGuard ?? true) || !(route.useLayout ?? true));
+                // Hide routes that are explicitly hidden, don't use the layout, or are not for authenticated users
+                if (route.hidden || !(route.authGuard ?? true) || !(route.useLayout ?? true)) {
+                    return false;
+                }
+
+                // If the user is not logged in, don't show any authenticated routes
+                if (!user?.role) {
+                    return false;
+                }
+
+                // Admins can see all routes that are part of the layout
+                if (user.role === UserRoleEnum.ADMIN) {
+                    return true;
+                }
+
+                // For other roles, check if their role is included in the route's role array
+                if (route.roles) {
+                    return route.roles.includes(user.role);
+                }
+
+                // If a route has no specific roles defined, it's visible to all authenticated users (except admin handled above)
+                return true;
             })
             .map((route) => {
                 if (route.children) {
-                    return { ...route, children: filterRoutes(route.children) };
+                    const filteredChildren = filterRoutes(route.children);
+                    if (filteredChildren.length > 0) {
+                        return { ...route, children: filteredChildren };
+                    }
+                    // Hide parent if no children are visible, unless it's a link itself
+                    return { ...route, children: [] };
                 }
                 return route;
-            });
+            })
+            .filter(
+                (route) => !route.children || route.children.length > 0 || (route.element && !route.children?.length),
+            );
     };
 
     const handleSignOut = () => {
         setIsLoggingOut(true);
         setTimeout(() => {
             localStorage.removeItem("isAuthenticated");
-            localStorage.removeItem("userRole");
+            localStorage.removeItem("user");
             setIsLoggingOut(false);
             navigate("/login");
         }, 500);
