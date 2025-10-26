@@ -5,7 +5,7 @@ import type { StudentProgress } from "@/types";
 export const mockStudents: StudentProgress[] = [
     {
         id: 1,
-        name: "Blessing Eze",
+        name: "Musa Isa",
         matricNo: "S21/0123",
         site: MOCK_LOCATIONS.SIWES_SITE.name,
         progress: 85,
@@ -14,7 +14,7 @@ export const mockStudents: StudentProgress[] = [
     },
     {
         id: 2,
-        name: "Chinedu Oki",
+        name: "Tanimu Ahmed",
         matricNo: "S21/0456",
         site: "NaijaSoft Solutions",
         progress: 60,
