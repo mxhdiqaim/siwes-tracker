@@ -9,6 +9,7 @@ import LandingScreen from "@/pages/landing-screen.tsx";
 import { type UserRole, UserRoleEnum } from "@/types/user-type.ts";
 import HomeScreen from "@/pages/home-screen.tsx";
 import ViewLecturers from "@/pages/view-lectures.tsx";
+import ViewSchedules from "@/pages/view-schedules.tsx";
 
 export interface AppRouteType {
     to: string;
@@ -49,6 +50,14 @@ export const appRoutes: AppRouteType[] = [
                 title: "View Lecturers",
                 element: ViewLecturers,
                 icon: "👩‍🏫",
+                roles: [UserRoleEnum.ADMIN],
+                hidden: true,
+            },
+            {
+                to: "schedules",
+                title: "View Schedules",
+                element: ViewSchedules,
+                icon: "📅",
                 roles: [UserRoleEnum.ADMIN],
                 hidden: true,
             },

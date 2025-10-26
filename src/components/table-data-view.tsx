@@ -25,6 +25,8 @@ const TableDataView = <T extends GridValidRowModel>({ data, columns, getRowId }:
             }}
             pageSizeOptions={[5]}
             disableRowSelectionOnClick
+            disableColumnResize
+            disableColumnMenu
             sx={{
                 border: "none",
                 "& .MuiDataGrid-columnHeaders": {

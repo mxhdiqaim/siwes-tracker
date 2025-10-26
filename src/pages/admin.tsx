@@ -155,7 +155,11 @@ const AdminDashboard: FC = () => {
                             </Typography>
                             <Typography color="text.secondary">Upload or manage teaching schedules.</Typography>
                             <Box sx={{ mt: 2, display: "flex", gap: 1 }}>
-                                <Button variant="contained" color="primary">
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={() => navigate("/admin/schedules")}
+                                >
                                     Open
                                 </Button>
                                 <Button component="label" variant="contained" color="success">
