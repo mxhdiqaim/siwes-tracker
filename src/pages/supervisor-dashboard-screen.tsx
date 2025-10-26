@@ -5,9 +5,10 @@ import MapDisplay from "@/components/map-display.tsx";
 import AttendanceWidget from "@/components/attendance-widget.tsx";
 import CustomCard from "@/components/ui/custom-card.tsx";
 import { MOCK_LOCATIONS, DUTSE_CENTER } from "@/utils/map-location";
-import { getStatusChip, mockStudents } from "@/components";
+import { getStatusChip } from "@/components";
 import TableDataView from "@/components/table-data-view.tsx";
 import type { GridColDef } from "@mui/x-data-grid";
+import { mockStudents } from "@/data/students.ts";
 
 const SupervisorDashboard: FC = () => {
     const theme = useTheme();

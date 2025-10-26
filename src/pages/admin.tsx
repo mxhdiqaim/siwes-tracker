@@ -184,7 +184,7 @@ const AdminDashboard: FC = () => {
                             </Typography>
                             <Typography color="text.secondary">Upload or update students' information.</Typography>
                             <Box sx={{ mt: 2, display: "flex", gap: 1 }}>
-                                <Button variant="contained" color="primary">
+                                <Button variant="contained" color="primary" onClick={() => navigate("/admin/students")}>
                                     View Students
                                 </Button>
                                 <Button component="label" variant="contained" color="success">
