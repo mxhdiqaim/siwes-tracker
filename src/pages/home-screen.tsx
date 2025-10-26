@@ -28,7 +28,7 @@ const HomeScreen = () => {
                 navigate(destinationRoute.to, { replace: true });
             } else {
                 // Fallback for authenticated users with no specific route
-                navigate("/login", { replace: true });
+                navigate("/landing", { replace: true });
             }
         } else {
             // If there's no authenticated user, they must log in.

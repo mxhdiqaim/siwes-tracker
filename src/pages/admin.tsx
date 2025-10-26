@@ -3,6 +3,7 @@ import { AppBar, Box, Button, Grid, Toolbar, Typography, styled, useTheme } from
 import CustomCard from "@/components/ui/custom-card.tsx";
 import type { GridColDef } from "@mui/x-data-grid";
 import TableDataView from "@/components/table-data-view.tsx";
+import { useNavigate } from "react-router-dom";
 
 // Styled component for the hidden file input
 const VisuallyHiddenInput = styled("input")({
@@ -67,6 +68,7 @@ const attendanceLogs = [
 
 const AdminDashboard: FC = () => {
     const theme = useTheme();
+    const navigate = useNavigate();
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, fileType: string) => {
         const file = event.target.files?.[0];
@@ -124,7 +126,11 @@ const AdminDashboard: FC = () => {
                             </Typography>
                             <Typography color="text.secondary">Add, edit, or bulk upload lecturer profiles.</Typography>
                             <Box sx={{ mt: 2, display: "flex", gap: 1 }}>
-                                <Button variant="contained" color="primary">
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={() => navigate("/admin/lecturers")}
+                                >
                                     Open
                                 </Button>
                                 <Button component="label" variant="contained" color="success">
