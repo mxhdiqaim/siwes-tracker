@@ -111,7 +111,7 @@ const SideBar: FC<Props> = ({ sx, drawerState, toggleDrawer, showDrawer }) => {
             localStorage.removeItem("isAuthenticated");
             localStorage.removeItem("user");
             setIsLoggingOut(false);
-            navigate("/login");
+            navigate("/");
         }, 500);
     };
 
