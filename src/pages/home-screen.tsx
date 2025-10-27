@@ -32,7 +32,7 @@ const HomeScreen = () => {
             }
         } else {
             // If there's no authenticated user, they must log in.
-            navigate("/login", { replace: true });
+            navigate("/landing", { replace: true });
         }
     }, [user, isAuthenticated, isLoading, navigate]);
 

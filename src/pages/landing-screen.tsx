@@ -5,6 +5,8 @@ import rectorImg from "@/assets/rector.jpeg";
 import projectDeveloperImg from "@/assets/project_developer.jpeg";
 import projectLeaderImg from "@/assets/project_leader.jpeg";
 import directorQaImg from "@/assets/director_qa.jpeg";
+import NITDAImg from "@/assets/nitda_nigeria_cover.jpg";
+import SIWESImg from "@/assets/siwes.jpg";
 
 // Placeholder data - replace with actual data
 const rector = {
@@ -19,6 +21,7 @@ const siwesInfo = {
     title: "About SIWES",
     description:
         "The Student Industrial Work Experience Scheme (SIWES) is a skills training programme designed to expose and prepare students of universities, polytechnics, and colleges of education for the industrial work situation they are likely to meet after graduation. It is an effort to bridge the gap between theory and practice of engineering and technology, sciences, agriculture, medical, management and other professional educational programmes in the Nigerian tertiary institutions.",
+    imageUrl: SIWESImg,
 };
 
 const nitdaInfo = {
@@ -26,7 +29,7 @@ const nitdaInfo = {
     bossName: "Kashifu Inuwa Abdullahi",
     bossTitle: "CCIE, DG/CEO of NITDA",
     vision: "The National Information Technology Development Agency (NITDA) is committed to transforming Nigeria into a knowledge-based and IT-driven economy. A key part of this vision is supporting tertiary institutions with infrastructure, training, and resources to foster innovation, digital literacy, and a skilled workforce ready for the future.",
-    imageUrl: "https://via.placeholder.com/200", // Replace with actual image URL
+    imageUrl: NITDAImg,
 };
 
 const teamMembers = [
@@ -107,7 +110,7 @@ const LandingScreen = () => {
                             <Avatar
                                 variant="rounded"
                                 alt="SIWES"
-                                src={"https://via.placeholder.com/300"} // Placeholder for SIWES image
+                                src={siwesInfo.imageUrl}
                                 sx={{ width: { xs: "100%", md: 300 }, height: { xs: 200, md: 200 }, borderRadius: 2 }}
                             />
                         </Box>
@@ -128,7 +131,10 @@ const LandingScreen = () => {
                             <Avatar
                                 alt={nitdaInfo.bossName}
                                 src={nitdaInfo.imageUrl}
-                                sx={{ width: { xs: 150, md: 300 }, height: { xs: 150, md: 300 } }}
+                                sx={{
+                                    width: { xs: "100%", md: 350 },
+                                    height: { xs: 200, md: 200 },
+                                }}
                             />
                             <Box>
                                 <Typography variant="h5" component="h2" gutterBottom>

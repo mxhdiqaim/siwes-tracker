@@ -17,6 +17,9 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
+import NITDAImg from "@/assets/nitda_nigeria_cover.jpg";
+import JIGPOLYImg from "@/assets/jigpoly.jpeg";
+
 const defaultValues = {
     password: "",
     email: "",
@@ -86,6 +89,22 @@ const Login = () => {
                         },
                     }}
                 >
+                    {/* Logo Section */}
+                    <Box
+                        sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            mb: 3,
+                        }}
+                    >
+                        <img
+                            src={JIGPOLYImg}
+                            alt="Jigawa Poly Logo"
+                            style={{ height: "120px", objectFit: "contain" }}
+                        />
+                        <img src={NITDAImg} alt="NITDA Logo" style={{ height: "120px", objectFit: "contain" }} />
+                    </Box>
                     <Box sx={{ textAlign: "center", mb: 5 }}>
                         <Typography variant={"h5"} sx={{ fontWeight: 500 }}>
                             Welcome Back! Login to your account
