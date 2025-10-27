@@ -2,20 +2,10 @@ import { dummyUsers } from "@/data/users";
 import useNotifier from "@/hooks/use-notifier";
 import { loginUserType, type LoginUserType } from "@/types/user-type";
 import { yupResolver } from "@hookform/resolvers/yup";
-import {
-    Box,
-    Button,
-    FormControl,
-    FormHelperText,
-    Grid,
-    Link as MuiLink,
-    TextField,
-    Typography,
-    useTheme,
-} from "@mui/material";
+import { Box, Button, FormControl, FormHelperText, Grid, TextField, Typography, useTheme } from "@mui/material";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import NITDAImg from "@/assets/nitda_nigeria_cover.jpg";
 import JIGPOLYImg from "@/assets/jigpoly.jpeg";
