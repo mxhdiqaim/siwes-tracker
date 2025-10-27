@@ -158,17 +158,6 @@ const Login = () => {
                                 </FormHelperText>
                             )}
                         </FormControl>
-                        <Box
-                            sx={{
-                                display: "flex",
-                                justifyContent: "flex-end",
-                                my: 3,
-                            }}
-                        >
-                            <MuiLink component={Link} to="/forget-password" sx={{ textDecoration: "none" }}>
-                                Forgot Password?
-                            </MuiLink>
-                        </Box>
                         <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
                             <Button
                                 type="submit"
@@ -184,14 +173,6 @@ const Login = () => {
                             >
                                 {loading ? "Logging in..." : "Login"}
                             </Button>
-                        </Box>
-                        <Box sx={{ textAlign: "center", mt: 2 }}>
-                            <Typography variant="body1">
-                                Don&apos;t have an account?{" "}
-                                <Button variant="text" onClick={() => navigate("/register")}>
-                                    Register
-                                </Button>
-                            </Typography>
                         </Box>
                     </form>
                 </Box>
