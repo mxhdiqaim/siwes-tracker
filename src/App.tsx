@@ -5,6 +5,7 @@ import Layout from "@/components/layout";
 import GuardedRoute from "@/routes/guarded-route.tsx";
 
 import "./App.css";
+import { ReportsProvider } from "@/context/report-context.tsx";
 
 const renderRoutes = (routes: AppRouteType[], parentPath = ""): JSX.Element[] => {
     return routes.flatMap((route, index) => {
@@ -38,7 +39,9 @@ const renderRoutes = (routes: AppRouteType[], parentPath = ""): JSX.Element[] =>
 function App() {
     return (
         <Router>
-            <Routes>{renderRoutes(appRoutes)}</Routes>
+            <ReportsProvider>
+                <Routes>{renderRoutes(appRoutes)}</Routes>
+            </ReportsProvider>
         </Router>
     );
 }

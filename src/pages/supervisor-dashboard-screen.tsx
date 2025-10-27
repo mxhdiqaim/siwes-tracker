@@ -9,14 +9,14 @@ import { getStatusChip } from "@/components";
 import TableDataView from "@/components/table-data-view.tsx";
 import type { GridColDef } from "@mui/x-data-grid";
 import { mockStudents } from "@/data/students.ts";
+import { useReports } from "@/hooks/use-reports.ts";
 
 const SupervisorDashboard: FC = () => {
     const theme = useTheme();
+    const { reports } = useReports(); // Get reports from context
 
-    // The supervisor's target visit location (using the mock SIWES Site)
+    // ... (mapMarkers and student columns remain the same)
     const targetSite = MOCK_LOCATIONS.SIWES_SITE;
-
-    // Prepare markers for the map: Target Site vs. User's Current (Simulated) Location
     const mapMarkers = useMemo(() => {
         return [
             {
@@ -30,7 +30,7 @@ const SupervisorDashboard: FC = () => {
         ];
     }, [targetSite]);
 
-    const columns: GridColDef[] = [
+    const studentColumns: GridColDef[] = [
         {
             field: "name",
             headerName: "Name/Matric",
@@ -90,6 +90,18 @@ const SupervisorDashboard: FC = () => {
         },
     ];
 
+    // Columns for the new reports table
+    const reportColumns: GridColDef[] = [
+        { field: "studentName", headerName: "Student Name", flex: 1 },
+        {
+            field: "dateSent",
+            headerName: "Date Sent",
+            flex: 1,
+            renderCell: (params) => new Date(params.value).toLocaleString(),
+        },
+        { field: "reportText", headerName: "Report Content", flex: 2 },
+    ];
+
     return (
         <Box sx={{ minHeight: "100vh" }}>
             <Typography variant="h4" gutterBottom sx={{ fontWeight: 700 }}>
@@ -100,7 +112,7 @@ const SupervisorDashboard: FC = () => {
             </Typography>
 
             <Grid container spacing={4}>
-                {/* Supervisor Check-in Widget (Operational Oversight - Verification) */}
+                {/* ... (Existing Grid items for Attendance, Map, etc.) */}
                 <Grid size={{ xs: 12, md: 4 }}>
                     <AttendanceWidget
                         targetLocation="SIWES_SITE" // The supervisor must check in at the SIWES site
@@ -108,7 +120,6 @@ const SupervisorDashboard: FC = () => {
                     />
                 </Grid>
 
-                {/* Map Verification Display (Real-time Verification Objective) */}
                 <Grid size={{ xs: 12, md: 8 }}>
                     <CustomCard>
                         <Box
@@ -143,9 +154,20 @@ const SupervisorDashboard: FC = () => {
                     </CustomCard>
                 </Grid>
 
-                {/* Student Progress Tracking & Grading (People Management/Reporting) */}
+                {/* New Section for Submitted Reports */}
                 <Grid size={12}>
-                    <TableDataView data={mockStudents} columns={columns} />
+                    <Typography variant="h5" gutterBottom sx={{ fontWeight: 700 }}>
+                        Student Reports
+                    </Typography>
+                    <TableDataView data={reports} columns={reportColumns} />
+                </Grid>
+
+                {/* Student Progress Tracking & Grading */}
+                <Grid size={12}>
+                    <Typography variant="h5" gutterBottom sx={{ fontWeight: 700, mt: 2 }}>
+                        Student Grading
+                    </Typography>
+                    <TableDataView data={mockStudents} columns={studentColumns} />
                 </Grid>
             </Grid>
         </Box>

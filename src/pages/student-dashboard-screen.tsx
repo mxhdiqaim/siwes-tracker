@@ -1,40 +1,52 @@
-import { useMemo, type FC } from "react";
-import { Box, Typography, Grid, useTheme, LinearProgress } from "@mui/material";
+import { useMemo, useState, type FC } from "react";
+import { Box, Typography, Grid, useTheme, LinearProgress, TextField, Button } from "@mui/material";
 import AttendanceWidget from "@/components/attendance-widget.tsx";
 import MapDisplay from "@/components/map-display";
 import CustomCard from "@/components/ui/custom-card.tsx";
 import { MOCK_LOCATIONS } from "@/utils/map-location";
+import { useReports } from "@/hooks/use-reports.ts";
 
 // Mock data for student's SIWES progress
 const mockStudentData = {
+    id: "S21/0123",
     name: "Musa Garba",
     matricNo: "S21/0123",
     site: MOCK_LOCATIONS.SIWES_SITE.name,
     supervisor: "Aisha Yusuf",
-    requiredHours: 480, // Total hours required
-    completedHours: 384, // Completed hours
+    requiredHours: 480,
+    completedHours: 384,
     tasksCompleted: 15,
     tasksTotal: 20,
 };
 
 const StudentDashboard: FC = () => {
     const theme = useTheme();
+    const { addReport } = useReports();
+    const [reportText, setReportText] = useState("");
 
-    // Calculate progress percentages
+    const handleSubmitReport = () => {
+        if (!reportText.trim()) {
+            alert("Report cannot be empty.");
+            return;
+        }
+        addReport({
+            studentId: mockStudentData.id,
+            studentName: mockStudentData.name,
+            reportText,
+        });
+        setReportText(""); // Clear the text field after submission
+    };
+
+    // ... (other calculations and hooks remain the same)
     const hourCompletion = Math.round((mockStudentData.completedHours / mockStudentData.requiredHours) * 100);
     const taskCompletion = Math.round((mockStudentData.tasksCompleted / mockStudentData.tasksTotal) * 100);
-
-    // The student's target SIWES site location
     const targetSite = MOCK_LOCATIONS.SIWES_SITE;
-
-    // Prepare markers for the map: Target SIWES Site
     const mapMarkers = useMemo(() => {
         return [
             {
                 position: targetSite,
                 label: `Your SIWES Site: ${targetSite.name}`,
             },
-            // Show the mock user's current location for self-verification
             {
                 position: MOCK_LOCATIONS.USER_CURRENT,
                 label: "Your Current Location (Simulated)",
@@ -52,12 +64,11 @@ const StudentDashboard: FC = () => {
             </Typography>
 
             <Grid container spacing={4}>
-                {/* 1. SIWES Site Attendance Check (Fix Grid Syntax and add CustomCard wrap) */}
+                {/* ... (Existing Grid items for Attendance, Progress, etc.) */}
                 <Grid size={{ xs: 12, md: 4 }}>
                     <AttendanceWidget targetLocation="SIWES_SITE" userRole="student" />
                 </Grid>
 
-                {/* 2. Progress Tracking Metrics (Fix Grid Syntax) */}
                 <Grid size={{ xs: 12, md: 8 }}>
                     <CustomCard
                         sx={{
@@ -126,6 +137,27 @@ const StudentDashboard: FC = () => {
                                 </Typography>
                             </Box>
                         </CustomCard>
+                    </CustomCard>
+                </Grid>
+
+                {/* New Report Submission Section */}
+                <Grid size={12}>
+                    <CustomCard>
+                        <Typography variant="h5" sx={{ mb: 2, fontWeight: 700 }}>
+                            Submit Weekly Report
+                        </Typography>
+                        <TextField
+                            label="Enter your report details here"
+                            multiline
+                            rows={4}
+                            fullWidth
+                            variant="outlined"
+                            value={reportText}
+                            onChange={(e) => setReportText(e.target.value)}
+                        />
+                        <Button variant="contained" color="primary" sx={{ mt: 2 }} onClick={handleSubmitReport}>
+                            Submit Report
+                        </Button>
                     </CustomCard>
                 </Grid>
 

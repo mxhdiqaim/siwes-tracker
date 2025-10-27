@@ -1,5 +1,5 @@
 import { type FC } from "react";
-import { AppBar, Box, Button, Grid, Toolbar, Typography, styled, useTheme } from "@mui/material";
+import { AppBar, Box, Button, Grid, styled, Toolbar, Typography, useTheme } from "@mui/material";
 import CustomCard from "@/components/ui/custom-card.tsx";
 import type { GridColDef } from "@mui/x-data-grid";
 import TableDataView from "@/components/table-data-view.tsx";
@@ -75,6 +75,33 @@ const AdminDashboard: FC = () => {
         if (file) {
             alert(`${fileType} file "${file.name}" selected successfully!`);
         }
+    };
+
+    const handleExport = () => {
+        if (!attendanceLogs.length) return;
+
+        const headers = Object.keys(attendanceLogs[0]);
+        const csvContent = [
+            headers.join(","),
+            ...attendanceLogs.map((row) =>
+                headers
+                    .map((header) => {
+                        const value = row[header as keyof typeof row];
+                        return String(value).includes(",") ? `"${value}"` : value;
+                    })
+                    .join(","),
+            ),
+        ].join("\n");
+
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", "attendance-logs.csv");
+        link.style.visibility = "hidden";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     };
 
     const getStatusColor = (status: string) => {
@@ -212,8 +239,8 @@ const AdminDashboard: FC = () => {
                                 Recent lecturer attendance records.
                             </Typography>
                             <TableDataView data={attendanceLogs} columns={columns} />
-                            <Button variant="contained" fullWidth sx={{ mt: 2 }}>
-                                View Full Report
+                            <Button variant="contained" fullWidth sx={{ mt: 2 }} onClick={handleExport}>
+                                Export All Logs
                             </Button>
                         </CustomCard>
                     </Grid>
